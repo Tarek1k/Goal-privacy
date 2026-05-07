@@ -384,37 +384,63 @@
 <footer>© 2025 Goal. All rights reserved.</footer>
 
 <script>
+  // ─── Supabase config ────────────────────────────────────────────────────────
+  const SUPABASE_URL  = 'https://pnmbrsnvcomikltxlpjt.supabase.co';
+  const SUPABASE_ANON = 'PASTE_YOUR_ANON_KEY_HERE'; // ← your anon/public key from Supabase Dashboard → Settings → API
+  // ────────────────────────────────────────────────────────────────────────────
+
   function toggleBtn() {
     const checked = document.getElementById('confirm').checked;
     document.getElementById('submit-btn').disabled = !checked;
   }
 
-  function submitRequest() {
+  async function submitRequest() {
     const phone = document.getElementById('phone').value.trim();
-    const code = document.getElementById('country-code').value;
+    const code  = document.getElementById('country-code').value;
 
     if (!phone) {
       alert('Please enter your registered phone number.');
       return;
     }
 
-    // Build mailto link as fallback delivery method
-    // Replace this with a real API call to your backend when ready
-    const fullPhone = code + phone;
-    const reason = document.getElementById('reason').value || 'Not specified';
-    const notes = document.getElementById('notes').value || 'None';
+    const btn = document.getElementById('submit-btn');
+    btn.disabled    = true;
+    btn.textContent = 'Submitting…';
 
-    const subject = encodeURIComponent('Account Deletion Request – Goal App');
-    const body = encodeURIComponent(
-      `Account Deletion Request\n\nPhone: ${fullPhone}\nReason: ${reason}\nNotes: ${notes}\n\nSubmitted via: delete_account.html`
-    );
+    const payload = {
+      phone_number: code + phone,
+      reason: document.getElementById('reason').value || null,
+      notes:  document.getElementById('notes').value  || null,
+    };
 
-    // Show success UI
-    document.getElementById('form-section').style.display = 'none';
-    document.getElementById('success-section').style.display = 'block';
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/account_deletion_requests`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey':        SUPABASE_ANON,
+            'Authorization': `Bearer ${SUPABASE_ANON}`,
+            'Prefer':        'return=minimal',
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
-    // Open email client as the delivery method
-    window.location.href = `mailto:privacy@alnoor.app?subject=${subject}&body=${body}`;
+      if (res.ok) {
+        document.getElementById('form-section').style.display    = 'none';
+        document.getElementById('success-section').style.display = 'block';
+      } else {
+        const err = await res.text();
+        console.error('Supabase error:', err);
+        throw new Error('Server error');
+      }
+    } catch (e) {
+      btn.disabled    = false;
+      btn.textContent = 'Permanently Delete My Account';
+      alert('Something went wrong. Please try again or contact us at privacy@goal.app');
+    }
   }
 </script>
 
