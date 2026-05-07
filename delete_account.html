@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delete My Account – Goal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red: #c0392b;
+      --red-light: #fdf2f1;
+      --red-border: #f0c0bb;
+      --green: #1a7a4a;
+      --green-light: #e8f5ee;
+      --ink: #111a14;
+      --muted: #4a5e50;
+      --border: #e0e0e0;
+      --bg: #f7faf8;
+      --white: #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--ink);
+      color: white;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50px;
+      padding: 5px 16px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 8px;
+    }
+    header p { opacity: 0.6; font-size: 14px; font-weight: 300; }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Warning box */
+    .warning-box {
+      background: var(--red-light);
+      border: 1px solid var(--red-border);
+      border-left: 4px solid var(--red);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .warning-box h3 {
+      color: var(--red);
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .warning-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    .warning-box ul li {
+      font-size: 14px;
+      color: #7a2020;
+      padding-left: 18px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .warning-box ul li::before {
+      content: '•';
+      position: absolute;
+      left: 4px;
+      color: var(--red);
+    }
+
+    /* Steps */
+    .steps-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--ink);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .step-content h4 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+    .step-content p { font-size: 14px; color: var(--muted); }
+
+    /* Form card */
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+    .form-card h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+    .form-card .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--ink);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--ink);
+      background: white;
+    }
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* phone row */
+    .phone-row { display: flex; gap: 10px; }
+    .country-code {
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    /* Confirm checkbox */
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: var(--red-light);
+      border-radius: 10px;
+      border: 1px solid var(--red-border);
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--red);
+    }
+    .checkbox-row label {
+      font-size: 14px;
+      color: #7a2020;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    /* Submit button */
+    .btn-delete {
+      width: 100%;
+      padding: 14px;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-delete:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .btn-delete:hover:not(:disabled) { opacity: 0.88; }
+
+    /* Success state */
+    .success-box {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-icon { font-size: 48px; margin-bottom: 16px; }
+    .success-box h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+    .success-box p { color: var(--muted); font-size: 15px; }
+
+    /* Arabic note */
+    .arabic-note {
+      direction: rtl;
+      text-align: right;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .arabic-note strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green);
+      font-size: 14px;
+      text-decoration: none;
+      margin-top: 28px;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #9ab0a0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="app-badge">⚽ Goal App</div>
+  <h1>Delete My Account</h1>
+  <p>We're sorry to see you go. This action is permanent.</p>
+</header>
+
+<div class="container">
+
+  <div class="arabic-note">
+    <strong>طلب حذف الحساب</strong>
+    إذا كنت تريد حذف حسابك في تطبيق Goal، يرجى ملء النموذج أدناه. سيتم حذف حسابك وجميع بياناتك خلال 7 أيام عمل.
+  </div>
+
+  <div class="warning-box">
+    <h3>⚠️ Before you continue — this will permanently delete:</h3>
+    <ul>
+      <li>Your account and login access</li>
+      <li>Your booking history and upcoming reservations</li>
+      <li>Your profile information (name, phone number, city)</li>
+    </ul>
+  </div>
+
+  <div class="steps-label">What happens next</div>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>Submit the form below</h4>
+      <p>Fill in your registered phone number and confirm your request.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>We verify your identity</h4>
+      <p>We'll confirm the phone number matches an existing account.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>Account deleted within 7 days</h4>
+      <p>All your data is permanently removed from our servers. This cannot be undone.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div id="form-section">
+      <h2>Request Account Deletion</h2>
+      <p class="subtitle">Enter the phone number registered to your Goal account.</p>
+
+      <div class="form-group">
+        <label for="phone">Registered Phone Number</label>
+        <div class="phone-row">
+          <select class="country-code" id="country-code">
+            <option value="+963">🇸🇾 +963</option>
+            <option value="+966">🇸🇦 +966</option>
+            <option value="+971">🇦🇪 +971</option>
+            <option value="+962">🇯🇴 +962</option>
+            <option value="+961">🇱🇧 +961</option>
+            <option value="+964">🇮🇶 +964</option>
+            <option value="+970">🇵🇸 +970</option>
+            <option value="+20">🇪🇬 +20</option>
+            <option value="+31">🇳🇱 +31</option>
+            <option value="+1">🇺🇸 +1</option>
+          </select>
+          <input type="tel" id="phone" placeholder="991 234 567" inputmode="numeric"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Reason for leaving <span style="color:#999;font-weight:300">(optional)</span></label>
+        <select id="reason">
+          <option value="">Select a reason…</option>
+          <option value="not_using">I no longer use the app</option>
+          <option value="privacy">Privacy concerns</option>
+          <option value="found_alternative">Found an alternative</option>
+          <option value="technical">Technical issues</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional notes <span style="color:#999;font-weight:300">(optional)</span></label>
+        <textarea id="notes" placeholder="Tell us anything that might help us improve…"></textarea>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="confirm" onchange="toggleBtn()"/>
+        <label for="confirm">I understand this action is <strong>permanent and irreversible</strong>. My account and all associated data will be deleted.</label>
+      </div>
+
+      <button class="btn-delete" id="submit-btn" disabled onclick="submitRequest()">
+        Permanently Delete My Account
+      </button>
+    </div>
+
+    <div class="success-box" id="success-section">
+      <div class="success-icon">✅</div>
+      <h3>Request Received</h3>
+      <p>Your account deletion request has been submitted.<br/>Your data will be permanently deleted within <strong>7 business days</strong>.</p>
+    </div>
+  </div>
+
+  <a class="back-link" href="index.html">← Back to Privacy Policy</a>
+
+</div>
+
+<footer>© 2025 Goal. All rights reserved.</footer>
+
+<script>
+  function toggleBtn() {
+    const checked = document.getElementById('confirm').checked;
+    document.getElementById('submit-btn').disabled = !checked;
+  }
+
+  function submitRequest() {
+    const phone = document.getElementById('phone').value.trim();
+    const code = document.getElementById('country-code').value;
+
+    if (!phone) {
+      alert('Please enter your registered phone number.');
+      return;
+    }
+
+    // Build mailto link as fallback delivery method
+    // Replace this with a real API call to your backend when ready
+    const fullPhone = code + phone;
+    const reason = document.getElementById('reason').value || 'Not specified';
+    const notes = document.getElementById('notes').value || 'None';
+
+    const subject = encodeURIComponent('Account Deletion Request – Goal App');
+    const body = encodeURIComponent(
+      `Account Deletion Request\n\nPhone: ${fullPhone}\nReason: ${reason}\nNotes: ${notes}\n\nSubmitted via: delete_account.html`
+    );
+
+    // Show success UI
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('success-section').style.display = 'block';
+
+    // Open email client as the delivery method
+    window.location.href = `mailto:privacy@alnoor.app?subject=${subject}&body=${body}`;
+  }
+</script>
+
+</body>
+</html>
